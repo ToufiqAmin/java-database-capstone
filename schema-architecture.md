@@ -22,11 +22,10 @@ through Spring Data JPA (for MySQL) and Spring Data MongoDB (for MongoDB). Secur
 6. Repositories query the respective databases:
    - MySQL via Hibernate ORM.
    - MongoDB via native document queries.
-7. Retrieved data is returned to the service layer.
-8. The service layer prepares the response:
-   - JSON for REST APIs.
-   - Model attributes for Thymeleaf views.
-9. The controller sends the response back to the client:
-   - Thymeleaf renders HTML pages.
-   - REST APIs return JSON payloads.
-10. Errors and exceptions are handled via global exception handlers, returning appropriate error views or JSON responses.
+7. - Retrieved data is returned to the service layer which prepares the response:
+      - JSON for REST APIs.
+      - Model attributes for Thymeleaf views.
+   - Then, The controller sends the response back to the client:
+      - Thymeleaf renders HTML pages.
+      - REST APIs return JSON payloads. 
+8. Errors and exceptions are handled via global exception handlers, returning appropriate error views or JSON responses.
