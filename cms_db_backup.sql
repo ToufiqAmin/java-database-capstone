@@ -156,6 +156,112 @@ LOCK TABLES `patient` WRITE;
 INSERT INTO `patient` VALUES (1,'101 Oak St, Cityville','jane.doe@example.com','Jane Doe','passJane1','888-111-1111'),(2,'202 Maple Rd, Townsville','john.smith@example.com','John Smith','smithSecure','888-222-2222'),(3,'303 Pine Ave, Villageton','emily.rose@example.com','Emily Rose','emilyPass99','888-333-3333'),(4,'404 Birch Ln, Metropolis','michael.j@example.com','Michael Jordan','airmj23','888-444-4444'),(5,'505 Cedar Blvd, Springfield','olivia.m@example.com','Olivia Moon','moonshine12','888-555-5555'),(6,'606 Spruce Ct, Gotham','liam.k@example.com','Liam King','king321','888-666-6666'),(7,'707 Aspen Dr, Riverdale','sophia.l@example.com','Sophia Lane','sophieLane','888-777-7777'),(8,'808 Elm St, Newtown','noah.b@example.com','Noah Brooks','noahBest!','888-888-8888'),(9,'909 Willow Way, Star City','ava.d@example.com','Ava Daniels','avaSecure8','888-999-9999'),(10,'111 Chestnut Pl, Midvale','william.h@example.com','William Harris','willH2025','888-000-0000'),(11,'112 Redwood St, Fairview','mia.g@example.com','Mia Green','miagreen1','889-111-1111'),(12,'113 Cypress Rd, Edgewater','james.b@example.com','James Brown','jamiebrown','889-222-2222'),(13,'114 Poplar Ave, Crestwood','amelia.c@example.com','Amelia Clark','ameliacool','889-333-3333'),(14,'115 Sequoia Dr, Elmwood','ben.j@example.com','Ben Johnson','bennyJ','889-444-4444'),(15,'116 Palm Blvd, Harborview','ella.m@example.com','Ella Monroe','ellam123','889-555-5555'),(16,'117 Cottonwood Ct, Laketown','lucas.t@example.com','Lucas Turner','lucasTurn','889-666-6666'),(17,'118 Sycamore Ln, Hilltop','grace.s@example.com','Grace Scott','graceful','889-777-7777'),(18,'119 Magnolia Pl, Brookside','ethan.h@example.com','Ethan Hill','hill2025','889-888-8888'),(19,'120 Fir St, Woodland','ruby.w@example.com','Ruby Ward','rubypass','889-999-9999'),(20,'121 Beech Way, Lakeside','jack.b@example.com','Jack Baker','bakerjack','889-000-0000'),(21,'122 Alder Ave, Pinehill','mia.h@example.com','Mia Hall','hallMia','890-111-1111'),(22,'123 Hawthorn Blvd, Meadowbrook','owen.t@example.com','Owen Thomas','owen123','890-222-2222'),(23,'124 Dogwood Dr, Summit','ivy.j@example.com','Ivy Jackson','ivyIvy','890-333-3333'),(24,'125 Juniper Ct, Greenwood','leo.m@example.com','Leo Martin','leopass','890-444-4444'),(25,'126 Olive Rd, Ashville','ella.moore@example.com','Ella Moore','ellamoore','890-555-5555');
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'cms'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `GetDailyAppointmentReportByDoctor` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `GetDailyAppointmentReportByDoctor`(
+    IN report_date DATE
+)
+BEGIN
+    SELECT 
+        d.name AS doctor_name,
+        a.appointment_time,
+        a.status,
+        p.name AS patient_name,
+        p.phone AS patient_phone
+    FROM 
+        appointment a
+    JOIN 
+        doctor d ON a.doctor_id = d.id
+    JOIN 
+        patient p ON a.patient_id = p.id
+    WHERE 
+        DATE(a.appointment_time) = report_date
+    ORDER BY 
+        d.name, a.appointment_time;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetDoctorWithMostPatientsByMonth` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `GetDoctorWithMostPatientsByMonth`(
+    IN input_month INT, 
+    IN input_year INT
+)
+BEGIN
+    SELECT
+        doctor_id, 
+        COUNT(patient_id) AS patients_seen
+    FROM
+        appointment
+    WHERE
+        MONTH(appointment_time) = input_month 
+        AND YEAR(appointment_time) = input_year
+    GROUP BY
+        doctor_id
+    ORDER BY
+        patients_seen DESC
+    LIMIT 1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `GetDoctorWithMostPatientsByYear` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = latin1 */ ;
+/*!50003 SET character_set_results = latin1 */ ;
+/*!50003 SET collation_connection  = latin1_swedish_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`%` PROCEDURE `GetDoctorWithMostPatientsByYear`(
+    IN input_year INT
+)
+BEGIN
+    SELECT
+        doctor_id, 
+        COUNT(patient_id) AS patients_seen
+    FROM
+        appointment
+    WHERE
+        YEAR(appointment_time) = input_year
+    GROUP BY
+        doctor_id
+    ORDER BY
+        patients_seen DESC
+    LIMIT 1;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -166,4 +272,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-01 11:23:07
+-- Dump completed on 2025-10-01 12:08:23
