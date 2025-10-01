@@ -7,7 +7,7 @@ import jakarta.validation.constraints.*;
 import java.util.List;
 
 @Entity
-@Table(name = "doctors")
+@Table(name = "doctor")
 public class Doctor {
 
 // @Entity annotation:
@@ -100,7 +100,7 @@ public class Doctor {
 
     @ElementCollection
     @CollectionTable(name = "doctor_available_times", joinColumns = @JoinColumn(name = "doctor_id"))
-    @Column(name = "time_slot")
+    @Column(name = "available_times")
     private List<String> availableTimes;
 
     // Default constructor required by JPA

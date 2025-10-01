@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "admins")
+@Table(name = "admin")
 public class Admin {
 
 // @Entity annotation:
