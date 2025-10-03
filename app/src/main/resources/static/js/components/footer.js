@@ -1,7 +1,7 @@
 // footer.js — reusable static footer renderer
 
 export function renderFooter() {
-  const footerDiv = document.getElementById("footer");
+  const footerDiv = document.getElementById("footer-container");
 
   if (!footerDiv) return;
 

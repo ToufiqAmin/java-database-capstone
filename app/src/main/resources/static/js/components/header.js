@@ -1,7 +1,7 @@
 // header.js — dynamic header renderer for all pages
 
 export function renderHeader() {
-  const headerDiv = document.getElementById("header");
+  const headerDiv = document.getElementById("header-container");
 
   // If on root/index page, show minimal header
   if (window.location.pathname.endsWith("/") || window.location.pathname.endsWith("/index.html")) {
