@@ -13,7 +13,13 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/assets/css/index.css">
   <link rel="stylesheet" href="/assets/css/style.css">
-
+    <!-- Page-specific Logic -->
+    <script type="module" src="/js/services/index.js"></script>
+    <!-- JavaScript Utilities & Components -->
+    <script src="/js/util.js" defer></script>
+    <script src="/js/render.js" defer></script>
+    <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/components/footer.js"></script>
 
 </head>
 
@@ -45,22 +51,16 @@
   </div>
 
   <!-- Modal Structure -->
-  <div id="modal-overlay" class="modal-overlay hidden">
+  <div id="modal-overlay" class="modal hidden">
     <div class="modal-content">
-      <span class="modal-close" id="modal-close">&times;</span>
+      <span class="close" id="modal-close">&times;</span>
       <div id="modal-inner-content">
         <!-- Dynamic modal content will be inserted here -->
       </div>
     </div>
   </div>
 
-    <!-- Page-specific Logic -->
-    <script type="module" src="/js/services/index.js"></script>
-    <!-- JavaScript Utilities & Components -->
-    <script src="/js/util.js" defer></script>
-    <script src="/js/render.js" defer></script>
-    <script type="module" src="/js/components/header.js"></script>
-    <script type="module" src="/js/components/footer.js"></script>
+
 </body>
 
 </html>
