@@ -177,9 +177,11 @@ public class CentralService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Invalid email or password.");
             }
-            String token = tokenService.generateToken(patient.getId(), "patient", email);
+            // String token = tokenService.generateToken(patient.getId(), "patient", email);
+            String token = tokenService.generateToken(email);
             return ResponseEntity.ok(token);
         } catch (Exception e) {
+            e.printStackTrace(); // ✅ Log the actual error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Login failed due to an internal error.");
         }

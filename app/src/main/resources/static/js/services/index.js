@@ -70,6 +70,7 @@ const DOCTOR_API = `${API_BASE_URL}/api/doctors/login`;
 window.onload = () => {
   const adminLoginBtn = document.getElementById("adminLoginBtn");
   const doctorLoginBtn = document.getElementById("doctorLoginBtn");
+  const patientLoginBtn = document.getElementById("patientLoginBtn");
 
   if (adminLoginBtn) {
     adminLoginBtn.addEventListener("click", () => openModal("adminLogin"));
@@ -77,6 +78,10 @@ window.onload = () => {
 
   if (doctorLoginBtn) {
     doctorLoginBtn.addEventListener("click", () => openModal("doctorLogin"));
+  }
+
+  if (patientLoginBtn) {
+    patientLoginBtn.addEventListener("click", () => openModal("patientLogin"));
   }
 };
 

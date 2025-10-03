@@ -79,6 +79,18 @@ public class TokenService {
                 .compact();
     }    
 
+    // public String generateToken(Long userId, String role, String email) {
+    // return Jwts.builder()
+    //         .subject(email)
+    //         .claim("userId", userId)
+    //         .claim("role", role)
+    //         .issuedAt(new Date())
+    //         .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)) // 7 days
+    //         .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+    //         .compact();
+    // }
+
+
     public String extractEmail(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey()) // No more error now

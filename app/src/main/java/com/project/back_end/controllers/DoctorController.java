@@ -1,6 +1,7 @@
 package com.project.back_end.controllers;
 
 import com.project.back_end.DTO.Login;
+import com.project.back_end.DTO.DoctorDTO;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.services.DoctorService;
 import com.project.back_end.services.CentralService;
@@ -103,8 +104,14 @@ public class DoctorController {
     // 4. Get all doctors
     @GetMapping("/all")
     public ResponseEntity<?> getDoctor() {
-        List<Doctor> doctors = doctorService.getDoctors();
-        return ResponseEntity.ok(Map.of("doctors", doctors));
+        // List<Doctor> doctors = doctorService.getDoctors();
+        // return ResponseEntity.ok(Map.of("doctors", doctors));
+        List<DoctorDTO> doctorDTOs = doctorService.getDoctors()
+            .stream()
+            .map(DoctorDTO::new)
+            .toList();
+            return ResponseEntity.ok(Map.of("doctors", doctorDTOs));
+
     }
 
     // 5. Save a new doctor (admin-only)
@@ -167,6 +174,8 @@ public class DoctorController {
             @RequestParam(required = false) String time,
             @RequestParam(required = false) String speciality
     ) {
+        // List<Doctor> doctors = service.filterDoctor(name, speciality, time);
+        // return ResponseEntity.ok(Map.of("doctors", doctors));
         List<Doctor> doctors = service.filterDoctor(name, speciality, time);
         return ResponseEntity.ok(Map.of("doctors", doctors));
     }
