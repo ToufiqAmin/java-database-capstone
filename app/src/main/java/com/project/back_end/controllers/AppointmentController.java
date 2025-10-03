@@ -2,7 +2,7 @@ package com.project.back_end.controllers;
 
 import com.project.back_end.models.Appointment;
 import com.project.back_end.services.AppointmentService;
-import com.project.back_end.services.Service;
+import com.project.back_end.services.CentralService;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -58,11 +58,11 @@ public class AppointmentController {
 //    - Calls `AppointmentService` to handle the cancellation process and returns the result.
 
     private final AppointmentService appointmentService;
-    private final Service service;
+    private final CentralService service;
 
     // 2. Constructor injection
     //@Autowired
-    public AppointmentController(AppointmentService appointmentService, Service service) {
+    public AppointmentController(AppointmentService appointmentService, CentralService service) {
         this.appointmentService = appointmentService;
         this.service = service;
     }

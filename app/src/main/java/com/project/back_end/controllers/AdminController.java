@@ -2,7 +2,7 @@
 package com.project.back_end.controllers;
 
 import com.project.back_end.models.Admin;
-import com.project.back_end.services.Service;
+import com.project.back_end.services.CentralService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +29,11 @@ public class AdminController {
 //    - Delegates authentication logic to the `validateAdmin` method in the service layer.
 //    - Returns a `ResponseEntity` with a `Map` containing login status or messages.
 
-    private final Service service;
+    private final CentralService service;
 
     // 2. Constructor-based injection
-    // @Autowired
-    public AdminController(Service service) {
+    @Autowired
+    public AdminController(CentralService service) {
         this.service = service;
     }
 

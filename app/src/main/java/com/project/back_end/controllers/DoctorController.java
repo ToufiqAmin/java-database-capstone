@@ -3,7 +3,7 @@ package com.project.back_end.controllers;
 import com.project.back_end.DTO.Login;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.services.DoctorService;
-import com.project.back_end.services.Service;
+import com.project.back_end.services.CentralService;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -75,11 +75,11 @@ public class DoctorController {
 //    - Calls the shared `Service` to perform filtering logic and returns matching doctors in the response.
 
     private final DoctorService doctorService;
-    private final Service service;
+    private final CentralService service;
 
     // 2. Constructor injection
     //@Autowired
-    public DoctorController(DoctorService doctorService, Service service) {
+    public DoctorController(DoctorService doctorService, CentralService service) {
         this.doctorService = doctorService;
         this.service = service;
     }

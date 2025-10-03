@@ -1,25 +1,6 @@
 package com.project.back_end.services;
 
-import com.project.back_end.DTO.AppointmentDTO;
-import com.project.back_end.models.Admin;
-import com.project.back_end.models.Doctor;
-import com.project.back_end.models.Patient;
-import com.project.back_end.repo.AdminRepository;
-import com.project.back_end.repo.DoctorRepository;
-import com.project.back_end.repo.PatientRepository;
-import com.project.back_end.services.TokenService;
-//import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Optional;
-
-@Service // 1. Spring-managed service component
-public class Service {
 // 1. **@Service Annotation**
 // The @Service annotation marks this class as a service component in Spring. This allows Spring to automatically detect it through component scanning
 // and manage its lifecycle, enabling it to be injected into controllers or other services using @Autowired or constructor injection.
@@ -81,6 +62,28 @@ public class Service {
 // - If no filters are provided, it retrieves all appointments for the patient.
 // This flexible method supports patient-specific querying and enhances user experience on the client side.
 
+
+import com.project.back_end.DTO.AppointmentDTO;
+import com.project.back_end.models.Admin;
+import com.project.back_end.models.Doctor;
+import com.project.back_end.models.Patient;
+import com.project.back_end.repo.AdminRepository;
+import com.project.back_end.repo.DoctorRepository;
+import com.project.back_end.repo.PatientRepository;
+//import com.project.back_end.services.TokenService;
+//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service // 1. Spring-managed service component
+public class CentralService {
+
     public final TokenService tokenService;
     private final AdminRepository adminRepository;
     private final DoctorRepository doctorRepository;
@@ -90,7 +93,7 @@ public class Service {
 
     // 2. Constructor Injection
     //@Autowired
-    public Service(TokenService tokenService,
+    public CentralService(TokenService tokenService,
                    AdminRepository adminRepository,
                    DoctorRepository doctorRepository,
                    PatientRepository patientRepository,
