@@ -40,9 +40,9 @@ export function openModal(type) {
   } else if (type === 'patientLogin') {
     modalContent = `
         <h2>Patient Login</h2>
-        <input type="text" id="email" placeholder="Email" class="input-field">
-        <input type="password" id="password" placeholder="Password" class="input-field">
-        <button class="dashboard-btn" id="loginBtn">Login</button>
+        <input type="text" id="patientEmail" placeholder="Email" class="input-field">
+        <input type="password" id="patientPassword" placeholder="Password" class="input-field">
+        <button class="dashboard-btn" id="paqtientSubmitBtn">Login</button>
       `;
   }
   else if (type === "patientSignup") {
@@ -61,14 +61,14 @@ export function openModal(type) {
         <h2>Admin Login</h2>
         <input type="text" id="username" name="username" placeholder="Username" class="input-field">
         <input type="password" id="password" name="password" placeholder="Password" class="input-field">
-        <button class="dashboard-btn" id="adminLoginBtn" >Login</button>
+        <button class="dashboard-btn" id="adminSubmitBtn" >Login</button>
       `;
   } else if (type === 'doctorLogin') {
     modalContent = `
         <h2>Doctor Login</h2>
-        <input type="text" id="email" placeholder="Email" class="input-field">
-        <input type="password" id="password" placeholder="Password" class="input-field">
-        <button class="dashboard-btn" id="doctorLoginBtn" >Login</button>
+        <input type="text" id="doctorEmail" placeholder="Email" class="input-field">
+        <input type="password" id="doctorPassword" placeholder="Password" class="input-field">
+        <button class="dashboard-btn" id="doctorSubmitBtn" >Login</button>
       `;
   }
 
@@ -84,7 +84,7 @@ export function openModal(type) {
   }
 
   if (type === "patientLogin") {
-    document.getElementById("loginBtn").addEventListener("click", loginPatient);
+    document.getElementById("paqtientSubmitBtn").addEventListener("click", window.patientLoginHandler);
   }
 
   if (type === 'addDoctor') {
@@ -92,10 +92,10 @@ export function openModal(type) {
   }
 
   if (type === 'adminLogin') {
-    document.getElementById('adminLoginBtn').addEventListener('click', adminLoginHandler);
+    document.getElementById('adminSubmitBtn').addEventListener('click', window.adminLoginHandler);
   }
 
   if (type === 'doctorLogin') {
-    document.getElementById('doctorLoginBtn').addEventListener('click', doctorLoginHandler);
+    document.getElementById('doctorSubmitBtn').addEventListener('click', window.doctorLoginHandler);
   }
 }

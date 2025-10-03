@@ -63,8 +63,9 @@ import { openModal } from "../components/modals.js";
 import { API_BASE_URL } from "../config/config.js";
 
 // API Endpoints
-const ADMIN_API = `${API_BASE_URL}/api/admin/login`;
-const DOCTOR_API = `${API_BASE_URL}/api/doctors/login`;
+const ADMIN_API = `${API_BASE_URL}/admin/login`;
+const DOCTOR_API = `${API_BASE_URL}/doctor/login`;
+const PATIENT_API = `${API_BASE_URL}/patient/login`;
 
 // Setup button click listeners once DOM is ready
 window.onload = () => {
@@ -87,8 +88,8 @@ window.onload = () => {
 
 // === Admin Login Handler ===
 window.adminLoginHandler = async function () {
-  const username = document.getElementById("adminUsername")?.value;
-  const password = document.getElementById("adminPassword")?.value;
+  const username = document.getElementById("username")?.value.trim();
+  const password = document.getElementById("password")?.value.trim();
 
   if (!username || !password) {
     alert("Please enter both username and password.");
@@ -98,6 +99,7 @@ window.adminLoginHandler = async function () {
   const admin = { username, password };
 
   try {
+    console.log("API: ",ADMIN_API);
     const response = await fetch(ADMIN_API, {
       method: "POST",
       headers: {
@@ -158,3 +160,40 @@ window.doctorLoginHandler = async function () {
     alert("An error occurred. Please try again later.");
   }
 };
+
+// === Patient Login Handler ===
+window.patientLoginHandler = async function () {
+    const email = document.getElementById("patientEmail")?.value;
+    const password = document.getElementById("patientPassword")?.value;
+  
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+  
+    const patient = { email, password };
+  
+    try {
+      const response = await fetch(PATIENT_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(patient)
+      });
+  
+      if (!response.ok) {
+        alert("Invalid doctor credentials.");
+        return;
+      }
+  
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userRole", "patient");
+  
+      selectRole("patient");
+    } catch (error) {
+      console.error("Patient login failed:", error);
+      alert("An error occurred. Please try again later.");
+    }
+  };
