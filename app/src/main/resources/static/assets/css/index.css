@@ -52,4 +52,92 @@
 * On hover, darken the background to deep teal (`#003e3e`) for visual feedback.
  */
 
- 
+ /* This is the style sheet for global change across the files. */
+
+/* style.css */
+/* this is the style sheet file for index.html  */
+
+/* === Global Reset === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* === Base Styles === */
+html, body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* === Layout Wrapper === */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* === Heading === */
+h1 {
+  font-size: 48px;
+  margin-bottom: 50px;
+  color: #003e3e;
+  font-weight: bold;
+  font-family: 'Alegreya', 'Roboto', sans-serif;
+  text-align: center;
+}
+
+/* === Main Section === */
+main {
+  flex-grow: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  background-image: url('../images/index/index.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* === Role Buttons === */
+.role-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.role-button {
+  background-color: #015c5d;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  width: 200px;
+  margin-top: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.role-button:hover {
+  background-color: #A62B1F;
+}
+
+/* === Dashboard Buttons (if reused elsewhere) === */
+.dashboard-btn {
+  background-color: #015c5d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dashboard-btn:hover {
+  background-color: #003e3e;
+}

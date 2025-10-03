@@ -1,4 +1,73 @@
 <!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Metadata and Resources -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Role</title>
+  <link rel="icon" href="/assets/images/logo/logo.png" type="image/png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/assets/css/index.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+
+</head>
+
+<body>
+  <!-- Page Container -->
+  <div class="container">
+
+    <!-- Wrapper for Layout -->
+    <div class="wrapper">
+
+      <!-- Header Placeholder -->
+      <div id="header-container"></div>
+
+      <!-- Main Content Area -->
+      <main>
+        <h1>Select Your Role</h1>
+
+        <!-- Role Buttons -->
+        <div class="role-buttons">
+          <button id="adminLoginBtn" class="role-button">Admin</button>
+          <button id="patientLoginBtn" class="role-button">Patient</button>
+          <button id="doctorLoginBtn" class="role-button">Doctor</button>
+        </div>
+      </main>
+
+      <!-- Footer Placeholder -->
+      <div id="footer-container"></div>
+    </div>
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal-content">
+      <span class="modal-close" id="modal-close">&times;</span>
+      <div id="modal-inner-content">
+        <!-- Dynamic modal content will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+    <!-- Page-specific Logic -->
+    <script type="module" src="/js/index.js"></script>
+    <!-- JavaScript Utilities & Components -->
+    <script src="/js/util.js" defer></script>
+    <script src="/js/render.js" defer></script>
+    <script type="module" src="/js/components/header.js"></script>
+    <script type="module" src="/js/components/footer.js"></script>
+</body>
+
+</html>
+
+
+
+<!-- index.html -->
 <!-- 
 
 Step-by-Step Explanation of `index.html`.
@@ -102,69 +171,3 @@ and triggers modal-based login functionality.
     * Properly close all opened tags to complete the document structure.
 
  -->
-
- <!-- index.html -->
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <!-- Metadata and Resources -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Select Role</title>
-  <link rel="icon" href="../assets/images/logo/logo.png" type="image/png">
-
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="../assets/css/index.css">
-  <link rel="stylesheet" href="../assets/css/style.css">
-
-  <!-- JavaScript Utilities & Components -->
-  <script src="../js/util.js" defer></script>
-  <script src="../js/render.js" defer></script>
-  <script src="../js/components/header.js" defer></script>
-  <script src="../js/components/footer.js" defer></script>
-</head>
-
-<body>
-  <!-- Page Container -->
-  <div class="container">
-
-    <!-- Wrapper for Layout -->
-    <div class="wrapper">
-
-      <!-- Header Placeholder -->
-      <div id="header-container"></div>
-
-      <!-- Main Content Area -->
-      <main>
-        <h1>Select Your Role</h1>
-
-        <!-- Role Buttons -->
-        <div class="role-buttons">
-          <button id="adminLoginBtn" class="role-button">Admin</button>
-          <button id="patientLoginBtn" class="role-button">Patient</button>
-          <button id="doctorLoginBtn" class="role-button">Doctor</button>
-        </div>
-      </main>
-
-      <!-- Footer Placeholder -->
-      <div id="footer-container"></div>
-    </div>
-  </div>
-
-  <!-- Modal Structure -->
-  <div id="modal-overlay" class="modal-overlay hidden">
-    <div class="modal-content">
-      <span class="modal-close" id="modal-close">&times;</span>
-      <div id="modal-inner-content">
-        <!-- Dynamic modal content will be inserted here -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Page-specific Logic -->
-  <script type="module" src="../js/index.js" defer></script>
-</body>
-
-</html>
