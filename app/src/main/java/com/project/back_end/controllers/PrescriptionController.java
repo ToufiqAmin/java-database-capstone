@@ -3,77 +3,94 @@ package com.project.back_end.controllers;
 import com.project.back_end.models.Prescription;
 import com.project.back_end.services.AppointmentService;
 import com.project.back_end.services.PrescriptionService;
-import com.project.back_end.services.CentralService;
-//import org.springframework.beans.factory.annotation.Autowired;
+import com.project.back_end.services.CentralService; // Autowired Service for common functionality (token validation)
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@RestController // 1. REST controller for JSON API
-@RequestMapping("${api.path}prescription") // e.g. /api/prescription
+import java.util.HashMap;
+import java.util.Map; // Required for ResponseEntity<Map<String, String>> responses
+
+/**
+ * REST controller for managing Prescription entities.
+ * Handles doctor-only operations for saving and retrieving prescriptions.
+ */
+@RestController // 1. Designates this class as a REST controller
+@RequestMapping("${api.path}prescription") // Sets the base URL path (e.g., /api/prescription)
 public class PrescriptionController {
-    
-// 1. Set Up the Controller Class:
-//    - Annotate the class with `@RestController` to define it as a REST API controller.
-//    - Use `@RequestMapping("${api.path}prescription")` to set the base path for all prescription-related endpoints.
-//    - This controller manages creating and retrieving prescriptions tied to appointments.
-
-
-// 2. Autowire Dependencies:
-//    - Inject `PrescriptionService` to handle logic related to saving and fetching prescriptions.
-//    - Inject the shared `Service` class for token validation and role-based access control.
-//    - Inject `AppointmentService` to update appointment status after a prescription is issued.
-
-
-// 3. Define the `savePrescription` Method:
-//    - Handles HTTP POST requests to save a new prescription for a given appointment.
-//    - Accepts a validated `Prescription` object in the request body and a doctor’s token as a path variable.
-//    - Validates the token for the `"doctor"` role.
-//    - If the token is valid, updates the status of the corresponding appointment to reflect that a prescription has been added.
-//    - Delegates the saving logic to `PrescriptionService` and returns a response indicating success or failure.
-
-
-// 4. Define the `getPrescription` Method:
-//    - Handles HTTP GET requests to retrieve a prescription by its associated appointment ID.
-//    - Accepts the appointment ID and a doctor’s token as path variables.
-//    - Validates the token for the `"doctor"` role using the shared service.
-//    - If the token is valid, fetches the prescription using the `PrescriptionService`.
-//    - Returns the prescription details or an appropriate error message if validation fails.
 
     private final PrescriptionService prescriptionService;
     private final AppointmentService appointmentService;
-    private final CentralService centralService;
+    private final CentralService service; // Common service for validation
 
-    // 2. Constructor injection
-    //@Autowired
+    // 2. Constructor injection for dependencies
+    @Autowired
     public PrescriptionController(PrescriptionService prescriptionService,
-                                  AppointmentService appointmentService,
-                                  CentralService centralService) {
+                                   AppointmentService appointmentService,
+                                   CentralService service) {
         this.prescriptionService = prescriptionService;
         this.appointmentService = appointmentService;
-        this.centralService = centralService;
+        this.service = service;
     }
 
-    // 3. Save prescription for an appointment
-    @PostMapping("/save/{token}")
+    /**
+     * 3. Save a new prescription (Doctor access only).
+     * Endpoint: POST /.../prescription/{token}
+     * @param prescription The prescription details from the request body.
+     * @param token The doctor's authentication token.
+     * @return Success message or unauthorized status.
+     */
+    @PostMapping("/{token}")
     public ResponseEntity<?> savePrescription(@RequestBody Prescription prescription, @PathVariable String token) {
-        if (!centralService.validateToken(token, "doctor")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token.");
+        // Token validation: must be a doctor
+        ResponseEntity<Map<String, String>> validationResponse = service.validateToken(token, "doctor");
+        if (validationResponse != null) {
+            return validationResponse; // Returns UNAUTHORIZED or other error map
         }
 
-        // Update appointment status (e.g., to "1" meaning 'Completed')
-        appointmentService.changeAppointmentStatus(prescription.getAppointmentId(), 1);
+        // Extract the doctor's identity (email or ID) from the token for authorization/logging in the service.
+        String doctorIdentity = service.getTokenId(token);
 
+        // Update appointment status to 'Completed' (status code 1) after prescription is issued
+        // FIX: Added doctorIdentity as the required third argument for authorization/tracking
+        int appointmentStatusUpdate = appointmentService.changeAppointmentStatus(
+            prescription.getAppointmentId(), 
+            1,
+            doctorIdentity // Pass the doctor's identity (from token)
+        );
+        Map<String, String> errorResponse = new HashMap<>();
+
+        // Check if the appointment status update failed (assuming -1 means Not Found)
+        if (appointmentStatusUpdate == -1) {
+            errorResponse.put("message", "Appointment not found for ID: " + prescription.getAppointmentId());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        } else if (appointmentStatusUpdate != 1) {
+            // Handle other failure cases (e.g., database error)
+            errorResponse.put("message", "Failed to update appointment status before saving prescription.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+
+        // Delegate saving logic to the PrescriptionService (Only proceeds if appointment status was updated successfully)
         return prescriptionService.savePrescription(prescription);
     }
 
-    // 4. Get prescription by appointment ID
+    /**
+     * 4. Get a prescription by appointment ID (Doctor access only).
+     * Endpoint: GET /.../prescription/{appointmentId}/{token}
+     * @param appointmentId The ID of the appointment.
+     * @param token The doctor's authentication token.
+     * @return Prescription details or not found status.
+     */
     @GetMapping("/{appointmentId}/{token}")
     public ResponseEntity<?> getPrescription(@PathVariable Long appointmentId, @PathVariable String token) {
-        if (!centralService.validateToken(token, "doctor")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token.");
+        // Token validation: must be a doctor
+        ResponseEntity<Map<String, String>> validationResponse = service.validateToken(token, "doctor");
+        if (validationResponse != null) {
+            return validationResponse;
         }
 
+        // Delegate retrieval logic to the PrescriptionService
         return prescriptionService.getPrescription(appointmentId);
     }
 }

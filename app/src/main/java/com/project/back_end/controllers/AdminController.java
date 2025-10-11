@@ -1,47 +1,38 @@
-
 package com.project.back_end.controllers;
 
 import com.project.back_end.models.Admin;
-import com.project.back_end.services.CentralService;
+import com.project.back_end.services.CentralService; // Import the service class correctly
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController // 1. Mark as REST controller
-@RequestMapping("${api.path}admin") // Base URL: /api/admin if api.path=/api/
+import java.util.Map;
+
+/**
+ * REST controller for handling administrative operations, primarily login/authentication.
+ */
+@RestController // 1. Designates this class as a REST controller
+@RequestMapping("${api.path}admin") // Sets the base path for all endpoints in this controller
 public class AdminController {
 
-// 1. Set Up the Controller Class:
-//    - Annotate the class with `@RestController` to indicate that it's a REST controller, used to handle web requests and return JSON responses.
-//    - Use `@RequestMapping("${api.path}admin")` to define a base path for all endpoints in this controller.
-//    - This allows the use of an external property (`api.path`) for flexible configuration of endpoint paths.
+    private final CentralService service; // Use the correct class name 'CentralService'
 
-
-// 2. Autowire Service Dependency:
-//    - Use constructor injection to autowire the `Service` class.
-//    - The service handles core logic related to admin validation and token checking.
-//    - This promotes cleaner code and separation of concerns between the controller and business logic layer.
-
-
-// 3. Define the `adminLogin` Method:
-//    - Handles HTTP POST requests for admin login functionality.
-//    - Accepts an `Admin` object in the request body, which contains login credentials.
-//    - Delegates authentication logic to the `validateAdmin` method in the service layer.
-//    - Returns a `ResponseEntity` with a `Map` containing login status or messages.
-
-    private final CentralService service;
-
-    // 2. Constructor-based injection
-    @Autowired
+    // 2. Constructor-based dependency injection
     public AdminController(CentralService service) {
         this.service = service;
     }
 
-    // 3. Admin login endpoint
+    /**
+     * 3. Handles admin login requests by validating credentials.
+     * Endpoint: POST /api/admin/login
+     * @param admin The Admin object containing username and password from the request body.
+     * @return ResponseEntity containing a token on success (200 OK) or an error message (401 UNAUTHORIZED/500 INTERNAL SERVER ERROR).
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> adminLogin(@RequestBody Admin admin) {
-        return service.validateAdmin(admin.getUsername(), admin.getPassword());
+    public ResponseEntity<Map<String, String>> adminLogin(@RequestBody Admin admin) {
+        // Delegate validation to the service layer.
+        // The service layer's validateAdmin implementation in the Canvas expects an Admin object.
+        // Re-aligning the service call to match the updated Service implementation in the canvas
+        return service.validateAdmin(admin);
     }
-
 }
-

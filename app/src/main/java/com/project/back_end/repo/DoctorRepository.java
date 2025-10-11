@@ -2,56 +2,30 @@ package com.project.back_end.repo;
 
 import com.project.back_end.models.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Spring Data JPA Repository for the Doctor entity.
+ * Provides custom query methods for filtering by name, email, and specialty.
+ */
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long>{
-   // 1. Extend JpaRepository:
-//    - The repository extends JpaRepository<Doctor, Long>, which gives it basic CRUD functionality.
-//    - This allows the repository to perform operations like save, delete, update, and find without needing to implement these methods manually.
-//    - JpaRepository also includes features like pagination and sorting.
 
-// Example: public interface DoctorRepository extends JpaRepository<Doctor, Long> {}
-
-// 2. Custom Query Methods:
-
-//    - **findByEmail**:
-//      - This method retrieves a Doctor by their email.
-//      - Return type: Doctor
-//      - Parameters: String email
-
-//    - **findByNameLike**:
-//      - This method retrieves a list of Doctors whose name contains the provided search string (case-sensitive).
-//      - The `CONCAT('%', :name, '%')` is used to create a pattern for partial matching.
-//      - Return type: List<Doctor>
-//      - Parameters: String name
-
-//    - **findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase**:
-//      - This method retrieves a list of Doctors where the name contains the search string (case-insensitive) and the specialty matches exactly (case-insensitive).
-//      - It combines both fields for a more specific search.
-//      - Return type: List<Doctor>
-//      - Parameters: String name, String specialty
-
-//    - **findBySpecialtyIgnoreCase**:
-//      - This method retrieves a list of Doctors with the specified specialty, ignoring case sensitivity.
-//      - Return type: List<Doctor>
-//      - Parameters: String specialty
-
-// 3. @Repository annotation:
-//    - The @Repository annotation marks this interface as a Spring Data JPA repository.
-//    - Spring Data JPA automatically implements this repository, providing the necessary CRUD functionality and custom queries defined in the interface.
-
-    // 1. Find doctor by exact email
+    // 1. Find doctor by exact email (Spring Data derived query)
     Doctor findByEmail(String email);
 
-    // 2. Find doctors whose name matches a LIKE pattern (case-sensitive)
+    // 2. Find doctors by partial name match using JPQL and CONCAT 
+    // to include wildcards, ensuring flexible pattern matching as requested by the hint.
+    @Query("SELECT d FROM Doctor d WHERE d.name LIKE CONCAT('%', :name, '%')")
     List<Doctor> findByNameLike(String name);
 
-    // 3. Find doctors by name (contains, ignore case) and specialty (exact match, ignore case)
+    // 3. Filter doctors by partial name (ContainingIgnoreCase) and exact specialty (IgnoreCase).
+    // This uses Spring Data derived method naming for case-insensitive partial/exact matching.
     List<Doctor> findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(String name, String specialty);
 
-    // 4. Find doctors by specialty (case-insensitive)
+    // 4. Find doctors by specialty, ignoring case (Spring Data derived query)
     List<Doctor> findBySpecialtyIgnoreCase(String specialty);
 }

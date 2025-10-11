@@ -4,87 +4,45 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+/**
+ * JPA Entity representing a Patient. 
+ * Includes necessary fields for registration and authentication, along with validation constraints.
+ */
 @Entity
 @Table(name = "patient")
 public class Patient {
-// @Entity annotation:
-//    - Marks the class as a JPA entity, meaning it represents a table in the database.
-//    - Required for persistence frameworks (e.g., Hibernate) to map the class to a database table.
-
-// 1. 'id' field:
-//    - Type: private Long
-//    - Description:
-//      - Represents the unique identifier for each patient.
-//      - The @Id annotation marks it as the primary key.
-//      - The @GeneratedValue(strategy = GenerationType.IDENTITY) annotation auto-generates the ID value when a new record is inserted into the database.
-
-// 2. 'name' field:
-//    - Type: private String
-//    - Description:
-//      - Represents the patient's full name.
-//      - The @NotNull annotation ensures that the patient's name is required.
-//      - The @Size(min = 3, max = 100) annotation ensures that the name length is between 3 and 100 characters. 
-//      - Provides validation for correct input and user experience.
-
-
-// 3. 'email' field:
-//    - Type: private String
-//    - Description:
-//      - Represents the patient's email address.
-//      - The @NotNull annotation ensures that an email address must be provided.
-//      - The @Email annotation validates that the email address follows a valid email format (e.g., patient@example.com).
-
-// 4. 'password' field:
-//    - Type: private String
-//    - Description:
-//      - Represents the patient's password for login authentication.
-//      - The @NotNull annotation ensures that a password must be provided.
-//      - The @Size(min = 6) annotation ensures that the password must be at least 6 characters long.
-
-// 5. 'phone' field:
-//    - Type: private String
-//    - Description:
-//      - Represents the patient's phone number.
-//      - The @NotNull annotation ensures that a phone number must be provided.
-//      - The @Pattern(regexp = "^[0-9]{10}$") annotation validates that the phone number must be exactly 10 digits long.
-
-// 6. 'address' field:
-//    - Type: private String
-//    - Description:
-//      - Represents the patient's address.
-//      - The @NotNull annotation ensures that the address must be provided.
-//      - The @Size(max = 255) annotation ensures that the address does not exceed 255 characters in length, providing validation for the address input.
-
-
-// 7. Getters and Setters:
-//    - Standard getter and setter methods are provided for all fields: id, name, email, password, phone, and address.
-//    - These methods allow access and modification of the fields of the Patient class.
-
+    
+    // 1. Primary Key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 2. Name field
     @NotNull(message = "Patient name is required")
     @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
     @Column(nullable = false)
     private String name;
 
+    // 3. Email field (Unique identifier for login)
     @NotNull(message = "Email is required")
     @Email(message = "Email should be valid")
     @Column(nullable = false, unique = true)
     private String email;
 
+    // 4. Password field (Write-only to hide from JSON responses)
     @NotNull(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
+    // 5. Phone field (Unique and required for contact/identification)
     @NotNull(message = "Phone number is required")
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
     @Column(nullable = false, unique = true)
     private String phone;
 
+    // 6. Address field
     @NotNull(message = "Address is required")
     @Size(max = 255, message = "Address must be at most 255 characters")
     @Column(nullable = false)
@@ -151,6 +109,5 @@ public class Patient {
 
     public void setAddress(String address) {
         this.address = address;
-    }  
-
+    } 
 }
